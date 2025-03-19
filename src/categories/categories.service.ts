@@ -11,15 +11,16 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  isAdult(age: number): boolean {
-    if (age < 0) {
-      throw new Error('Age cannot be negative');
-    }
-    return age >= 18;
-  }
+  // isAdult(age: number): boolean {
+  //   if (age < 0) {
+  //     throw new Error('Age cannot be negative');
+  //   }
+  //   return age >= 18;
+  // }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
     const newCategory = this.categoryRepository.create(createCategoryDto);
+    console.log('category', newCategory);
     return this.categoryRepository.save(newCategory);
   }
 

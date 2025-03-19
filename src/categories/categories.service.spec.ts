@@ -31,16 +31,16 @@ describe('CategoriesService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  it('should return true when age is at least 18', () => {
-    expect(service.isAdult(19)).toBe(true);
-  });
+  // it('should return true when age is at least 18', () => {
+  //   expect(service.isAdult(19)).toBe(true);
+  // });
 
-  it('should return false when age is 17.9', () => {
-    expect(service.isAdult(17.9)).toBe(false);
-  });
-  it('should throw exception when age is negative', () => {
-    expect(() => service.isAdult(-1)).toThrow('Age cannot be negative');
-  });
+  // it('should return false when age is 17.9', () => {
+  //   expect(service.isAdult(17.9)).toBe(false);
+  // });
+  // it('should throw exception when age is negative', () => {
+  //   expect(() => service.isAdult(-1)).toThrow('Age cannot be negative');
+  // });
 
   it('should return all entries', async () => {
     const result = await service.findAll();
