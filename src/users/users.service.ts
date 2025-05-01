@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './../authentication/entities/user';
+import { UserEntity } from '../authentication/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Role } from './Role';
 
@@ -33,6 +33,15 @@ export class UsersService {
 
   async create(username: string, password: string) {
     return this.userRepository.save({ username, password }); // Never save passwords in clear text!
+  }
+
+  async assignRole(userId: number, role: Role) {
+    const user = await this.findUserById(userId);
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    user.role = role; // Assign the new role to the user
+    return this.userRepository.save(user); // Save the updated user back to the database
   }
 
   // An example to retrieve data with related data. Can be used for

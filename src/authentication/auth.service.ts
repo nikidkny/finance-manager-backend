@@ -14,22 +14,23 @@ export class AuthService {
   }
 
   async signup(user: any) {
-    return this.usersService.create(user.username, user.password);
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    return this.usersService.create(user.username, hashedPassword);
   }
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
     // console.log("user found", user);
 
-    if (user && user.password === pass) {
+    if (user && (await bcrypt.compare(pass, user.password))) {
       const { password, ...result } = user;
-      // console.log("user found removed password", result);
-
       return result;
     }
     return null;
   }
-
+  getJwtToken(payload: any): string {
+    return this.jwtService.sign(payload);
+  }
   async login(user: any) {
     const userFromDb = await this.usersService.findOne(user.username);
 

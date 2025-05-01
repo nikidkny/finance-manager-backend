@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEntryDto } from './dto/create-entry.dto';
 import { UpdateEntryDto } from './dto/update-entry.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,11 +26,18 @@ export class EntriesService {
   }
 
   async update(id: number, updateEntryDto: UpdateEntryDto): Promise<Entry> {
-    await this.entriesRepository.update(id, updateEntryDto);
-    return this.findOne(id);
+    const entry = await this.entriesRepository.findOneBy({ id });
+    if (!entry) {
+      throw new NotFoundException(`Entry with ID ${id} not found`);
+    }
+    Object.assign(entry, updateEntryDto);
+    return this.entriesRepository.save(entry);
   }
 
   async remove(id: number): Promise<void> {
-    await this.entriesRepository.delete(id);
+    const result = await this.entriesRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Entry with ID ${id} not found`);
+    }
   }
 }

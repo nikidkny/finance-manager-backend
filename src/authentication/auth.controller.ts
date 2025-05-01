@@ -27,7 +27,14 @@ export class AuthController {
   @Post('auth/signup')
   async signup(@Request2() req) {
     // console.log("body", req.body);
+    const user = await this.authService.signup(req.body);
 
-    return this.authService.signup(req.body);
+    const payload = {
+      username: user.username,
+      id: user.id,
+      role: user.role,
+    };
+    const token = await this.authService.login(payload);
+    return { token };
   }
 }
